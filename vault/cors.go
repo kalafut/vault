@@ -96,6 +96,7 @@ func (c *CORSConfig) Enable(urls []string, headers []string) error {
 	}
 
 	c.Lock()
+	// why are we not making new slices for AllowedOrigins and AllowedHeaders?
 	c.AllowedOrigins = urls
 
 	// Start with the standard headers to Vault accepts.
@@ -108,6 +109,7 @@ func (c *CORSConfig) Enable(urls []string, headers []string) error {
 	}
 	c.Unlock()
 
+// Why not just do this while locked?
 	atomic.StoreUint32(&c.Enabled, CORSEnabled)
 
 	return c.core.saveCORSConfig()
@@ -115,6 +117,7 @@ func (c *CORSConfig) Enable(urls []string, headers []string) error {
 
 // IsEnabled returns the value of CORSConfig.isEnabled
 func (c *CORSConfig) IsEnabled() bool {
+  // lock instead?
 	return atomic.LoadUint32(&c.Enabled) == CORSEnabled
 }
 
@@ -146,6 +149,7 @@ func (c *CORSConfig) IsValidOrigin(origin string) bool {
 		return false
 	}
 
+// length heck superfluous?
 	if len(c.AllowedOrigins) == 1 && (c.AllowedOrigins)[0] == "*" {
 		return true
 	}

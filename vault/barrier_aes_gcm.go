@@ -102,6 +102,7 @@ func (b *AESGCMBarrier) Initialize(key []byte) error {
 	// Verify the key size
 	min, max := b.KeyLength()
 	if len(key) < min || len(key) > max {
+	  // error message doesn't match comparison
 		return fmt.Errorf("Key size must be %d or %d", min, max)
 	}
 
@@ -119,7 +120,9 @@ func (b *AESGCMBarrier) Initialize(key []byte) error {
 	}
 
 	// Create a new keyring, install the keys
+
 	keyring := NewKeyring()
+		// KeyRing isnt mutable, or?
 	keyring = keyring.SetMasterKey(key)
 	keyring, err = keyring.AddKey(&Key{
 		Term:    1,

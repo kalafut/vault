@@ -13,7 +13,7 @@ type LockEntry struct {
 	sync.RWMutex
 }
 
-// CreateLocks returns an array so that the locks can be itterated over in
+// CreateLocks returns an array so that the locks can be iterated over in
 // order.
 //
 // This is only threadsafe if a process is using a single lock, or iterating
@@ -33,6 +33,7 @@ func CreateLocks() []*LockEntry {
 	return ret
 }
 
+// wut? why are collisions not a problem?
 func LockIndexForKey(key string) uint8 {
 	hf := md5.New()
 	hf.Write([]byte(key))
